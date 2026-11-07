@@ -285,7 +285,9 @@ they work: write_status becomes yes only after a verified change on that console
 		// Not mcp:read-only: that also applies while --probe-writes is on offer, which
 		// would tell hosts they may auto-approve a tool that can send DELETE. The
 		// unless-flags form still gives read-only hosts this tool, minus these flags.
-		Annotations: map[string]string{"mcp:read-only-unless-flags": "probe-writes,confirm", "pp:data-source": "live"},
+		// Without --probe-writes this only sends reads, so dogfood can run it for real
+		// rather than as a dry run that proves nothing about the probes.
+		Annotations: map[string]string{"mcp:read-only-unless-flags": "probe-writes,confirm", "pp:data-source": "live", "pp:preview-happy-path": "true", "pp:happy-args": "--agent"},
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if dryRunOK(flags) {
 				return writeDryRun(cmd.OutOrStdout(), flags, "reach")

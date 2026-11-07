@@ -460,7 +460,8 @@ func (c *Client) autoSelectConsole(ctx context.Context) (string, error) {
 			lines = append(lines, fmt.Sprintf("  ... and %d more", len(hosts)-10))
 			break
 		}
-		lines = append(lines, "  "+h.ID+"  "+h.Name)
+		// Console names come from the API, so they are escaped before reaching a terminal.
+		lines = append(lines, "  "+cliutil.EscapeTerminalControls(h.ID)+"  "+cliutil.EscapeTerminalControls(h.Name))
 	}
 	return "", fmt.Errorf("%w: %d consoles are visible, choose one with --console, UNIFI_CONSOLE_ID or config console_id:\n%s", ErrNoConsoleSelected, len(hosts), strings.Join(lines, "\n"))
 }
@@ -529,7 +530,7 @@ func (c *Client) httpClientFor(target requestTarget) (*http.Client, error) {
 		return nil, err
 	}
 	trust := tlsSettingsFromConfig(c.Config)
-	trust.Insecure = gatewaySkipsTLSVerify(u.Hostname())
+	trust.Insecure = gatewayTrustSkipsVerify(u.Hostname(), trust.CACert)
 	var timeout time.Duration
 	if c.HTTPClient != nil {
 		timeout = c.HTTPClient.Timeout
@@ -578,7 +579,35 @@ func gatewaySkipsTLSVerify(host string) bool {
 	case "0", "false", "no", "off":
 		return false
 	}
-	return hostIsLocalNetwork(host)
+	if !hostIsLocalNetwork(host) {
+		return false
+	}
+	// A self-signed gateway is why this default exists, but it also means anyone
+	// who can answer at this address on the LAN receives the local key. Loopback
+	// never leaves the machine, so only network addresses earn the warning.
+	if !hostIsLoopback(host) {
+		warnTLSOnce("warning: certificate verification is off for private gateway " + host + "; set UNIFI_CA_CERT to verify it\n")
+	}
+	return true
+}
+
+// gatewayTrustSkipsVerify lets a configured CA turn verification on for a private
+// gateway. Without it the address-based default overwrote the CA, so the documented
+// fix did nothing. An explicit UNIFI_INSECURE_SKIP_VERIFY still decides.
+func gatewayTrustSkipsVerify(host, caCert string) bool {
+	if strings.TrimSpace(caCert) != "" && strings.TrimSpace(cliutil.EnvOverride("UNIFI_INSECURE_SKIP_VERIFY")) == "" {
+		return false
+	}
+	return gatewaySkipsTLSVerify(host)
+}
+
+func hostIsLoopback(host string) bool {
+	host = strings.TrimSuffix(strings.TrimSpace(host), ".")
+	if strings.EqualFold(host, "localhost") {
+		return true
+	}
+	addr, err := netip.ParseAddr(strings.Trim(host, "[]"))
+	return err == nil && addr.Unmap().IsLoopback()
 }
 
 // hostIsLocalNetwork matches loopback, RFC1918, RFC4193 and link-local literals.

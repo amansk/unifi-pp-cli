@@ -2985,7 +2985,7 @@ func codeOrchPreviewPath(path string, templateVars map[string]string) string {
 		if name == "" || value == "" {
 			continue
 		}
-		path = strings.ReplaceAll(path, "{"+name+"}", neturl.PathEscape(value))
+		path = strings.ReplaceAll(path, "{"+name+"}", cliutil.EscapePathParam(value))
 	}
 	return path
 }

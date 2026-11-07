@@ -11,6 +11,8 @@ import (
 	"strings"
 	"sync/atomic"
 	"time"
+
+	"unifi-pp-cli/internal/cliutil"
 )
 
 // This file owns the learn_events measurement layer: telemetry-class
@@ -59,11 +61,6 @@ const (
 // same-second events).
 const learnEventTimeFormat = time.RFC3339
 
-// learnSurfaceEnvVar is the environment variable the MCP server sets
-// (in its own process, inherited by the shelled-out CLI) so events
-// recorded during an MCP-surfaced invocation carry surface=mcp.
-const learnSurfaceEnvVar = "UNIFI_LEARN_SURFACE"
-
 // learnSurfaceOverride is the in-process seam for surface detection:
 // an entrypoint that hosts commands without a subprocess boundary can
 // call SetLearnEventSurface instead of relying on the env var. Stored
@@ -82,13 +79,15 @@ func SetLearnEventSurface(surface string) {
 }
 
 // LearnEventSurface resolves which surface is executing: the
-// in-process override wins, then the env var the MCP server sets for
-// its shelled-out CLI children, then the CLI default.
+// in-process override wins, then the marker the MCP server forces into
+// its shelled-out CLI children, then the CLI default. The marker is used
+// rather than a dedicated variable because the server overwrites it for every
+// child, so a value exported in a shell cannot decide the surface for them.
 func LearnEventSurface() string {
 	if v, ok := learnSurfaceOverride.Load().(string); ok && v != "" {
 		return v
 	}
-	if strings.EqualFold(strings.TrimSpace(os.Getenv(learnSurfaceEnvVar)), LearnSurfaceMCP) {
+	if os.Getenv(cliutil.MCPChildEnvVar) == "1" {
 		return LearnSurfaceMCP
 	}
 	return LearnSurfaceCLI

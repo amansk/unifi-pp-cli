@@ -9,9 +9,14 @@ import (
 	"strings"
 
 	"unifi-pp-cli/internal/cliutil"
+	"unifi-pp-cli/internal/store"
 )
 
-func init() { normalizeMCPReadOnlySwitch() }
+func init() {
+	normalizeMCPReadOnlySwitch()
+	// The server runs some tools in-process, and those have no child marker.
+	store.SetLearnEventSurface(store.LearnSurfaceMCP)
+}
 
 // normalizeMCPReadOnlySwitch exists because the reserved cliutil check honors exactly
 // "1", so UNIFI_MCP_READ_ONLY=true left every write tool enabled while looking protected.

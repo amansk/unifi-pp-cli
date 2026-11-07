@@ -680,9 +680,12 @@ midnight, and times must be console-local (--trial-timezone).
 Docs say cloud keys are read-only today; a refused write fails clearly and changes nothing.
 Exits non-zero when the outcome is unresolved or does not verify.`,
 		Example: strings.Trim(`
+  unifi-pp-cli change apply --change-json '{"method":"PATCH","path":"/network/integration/v1/sites/SITE/firewall/policies/POLICY","body":{"enabled":false}}' --agent
   unifi-pp-cli change apply firewall-policy.json --trial --site 11111111-2222-3333-4444-555555555555 --agent
   unifi-pp-cli change apply disable-guest-wifi.json --confirm --json
   unifi-pp-cli change apply - --confirm --auto-revert < change.json`, "\n"),
+		// Dogfood runs the first Example, so it leads with the inline form. It has no --confirm,
+		// so it stops at the preview and sends nothing, and SITE and POLICY are placeholders.
 		Annotations: map[string]string{"pp:data-source": "live", "pp:preview-happy-path": "true", "mcp:read-only-unless-flags": "confirm"},
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if len(args) == 0 && cmd.Flags().NFlag() == 0 {

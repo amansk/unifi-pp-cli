@@ -4,6 +4,10 @@
 
 One binary for the official UniFi APIs, over the cloud connector or a direct connection to your gateway. A local mirror keeps a snapshot from each sync, and 'impact' estimates what a change would affect before you make it. Reads have run against one test console over the cloud connector; most writes have not.
 
+Created by [@phoenix-server](https://github.com/phoenix-server) (Ricardo Cabral).
+
+Contributors: [@amansk](https://github.com/amansk) (Amandeep Khurana), [@cathrynlavery](https://github.com/cathrynlavery) (Cathryn Lavery).
+
 ## Install
 
 The recommended path installs both the `unifi-pp-cli` binary and the `pp-unifi` agent skill (Claude Code, Codex, Cursor, Gemini CLI, GitHub Copilot, and other agents supported by the upstream [`skills`](https://github.com/vercel-labs/skills) CLI) in one shot:
@@ -1257,7 +1261,7 @@ Run `unifi-pp-cli doctor` to see the resolved config, data, state, and cache dir
 
 Static request headers can be configured under `headers`; per-command header overrides take precedence.
 
-`--ca-cert`, `UNIFI_CA_CERT`, or `ca_cert` adds a PEM CA bundle to the system trust roots. `--tls-server-name`, `UNIFI_TLS_SERVER_NAME`, or `tls_server_name` is the name checked against the certificate when the dialed address does not match it. Precedence is flag, then environment, then the config file. A config file other users can change does not supply these settings. Certificate verification failures are not retried.
+`--ca-cert`, `UNIFI_CA_CERT`, or `ca_cert` adds a PEM CA bundle to the system trust roots. On a private gateway address, verification is off by default because UniFi OS uses a self-signed certificate, and the CLI warns about it. Setting a CA turns verification on, which is the safer setup because otherwise anyone who can answer at that address on your LAN receives the local key. `--tls-server-name`, `UNIFI_TLS_SERVER_NAME`, or `tls_server_name` is the name checked against the certificate when the dialed address does not match it. Precedence is flag, then environment, then the config file. A config file other users can change does not supply these settings. Certificate verification failures are not retried.
 
 Environment variables:
 

@@ -2471,7 +2471,7 @@
                               "connect",
                               "innerspace"
                             ],
-                            "email": "example@ui.com",
+                            "email": "user@example.com",
                             "features": {
                               "deviceGroups": true,
                               "floorplan": {
@@ -2903,7 +2903,7 @@
                             "connect",
                             "innerspace"
                           ],
-                          "email": "example@ui.com",
+                          "email": "user@example.com",
                           "features": {
                             "deviceGroups": true,
                             "floorplan": {

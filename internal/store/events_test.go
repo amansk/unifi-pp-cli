@@ -122,17 +122,17 @@ func TestLearnEvent_SurfaceDetection(t *testing.T) {
 	t.Cleanup(func() { SetLearnEventSurface("") })
 
 	SetLearnEventSurface("")
-	t.Setenv(learnSurfaceEnvVar, "")
+	t.Setenv("UNIFI_MCP_CHILD", "")
 	if got := LearnEventSurface(); got != LearnSurfaceCLI {
 		t.Errorf("default surface = %q, want cli", got)
 	}
 
-	t.Setenv(learnSurfaceEnvVar, "mcp")
+	t.Setenv("UNIFI_MCP_CHILD", "1")
 	if got := LearnEventSurface(); got != LearnSurfaceMCP {
 		t.Errorf("env-var surface = %q, want mcp", got)
 	}
 
-	t.Setenv(learnSurfaceEnvVar, "")
+	t.Setenv("UNIFI_MCP_CHILD", "")
 	SetLearnEventSurface(LearnSurfaceMCP)
 	if got := LearnEventSurface(); got != LearnSurfaceMCP {
 		t.Errorf("override surface = %q, want mcp", got)
@@ -148,7 +148,7 @@ func TestLearnEvent_SurfaceDetection(t *testing.T) {
 	// empty surface and stay cli even while this process is MCP. User-text
 	// callers pass LearnEventSurface() and then the row records mcp.
 	SetLearnEventSurface("")
-	t.Setenv(learnSurfaceEnvVar, "McP")
+	t.Setenv("UNIFI_MCP_CHILD", "1")
 	if got := LearnEventSurface(); got != LearnSurfaceMCP {
 		t.Fatalf("folded env surface = %q, want mcp", got)
 	}

@@ -737,6 +737,7 @@ func initializePlatformReceipt(cmd *cobra.Command, flags *rootFlags) error {
 	if err != nil {
 		return err
 	}
+	writer.SetArgvRedactions(platform.SensitiveArgvPositions(writer.Receipt.Argv))
 	flags.receiptWriter = writer
 	cmd.Root().SetOut(writer.CaptureWriter("stdout", cmd.OutOrStdout()))
 	cmd.Root().SetErr(writer.CaptureWriter("stderr", cmd.ErrOrStderr()))

@@ -541,6 +541,9 @@ func mcpChildEnvDropped(entry string) bool {
 }
 
 func cliFailureDetail(stdout, stderr string) string {
+	// Child output can repeat API strings such as console names. Stream escaping
+	// removes control bytes and keeps the line breaks people read errors by.
+	stdout, stderr = cliutil.EscapeTerminalStream(stdout), cliutil.EscapeTerminalStream(stderr)
 	switch {
 	case stdout != "" && stderr != "":
 		return "stdout: " + stdout + "\nstderr: " + stderr
@@ -560,7 +563,7 @@ func stderrHintLines(stderr string) []string {
 			line := strings.TrimSpace(segment)
 			lower := strings.ToLower(line)
 			if strings.HasPrefix(lower, "hint:") || strings.HasPrefix(lower, "warning:") {
-				hints = append(hints, line)
+				hints = append(hints, cliutil.EscapeTerminalControls(line))
 			}
 		}
 	}
