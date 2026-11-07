@@ -12,14 +12,14 @@
     "type": "api_key",
     "api_key_available": true
   },
-  "source_fingerprint": "270193c7fd9b96dcb1fd9ad4e041bc1d8e386b8badb8fc658ee3af23988ee543",
+  "source_fingerprint": "73689b6ec99b2b66d56ad6f7cbfad0b136f0d64c3ba2ff07f40020be3fba4f30",
   "source_files": {
     "cmd/unifi-pp-cli/main.go": "9bdca0441f283350aa026208e96fcdfa24879576eafadd3d3499ae8799a7630d",
     "cmd/unifi-pp-mcp/http_auth_test.go": "26f915525de0d55216c964926b0434d8d315e5c0bfc55e76072f8a0a93f4587f",
     "cmd/unifi-pp-mcp/main.go": "a31c75d57bd1e72e5fcdb32dab965523b586eaaa3b06a2782337d0c005dcf217",
     "cmd/unifi-pp-mcp/unifi_readonly.go": "fee2b1bf515cabcbb150a9b4677994ecb66a4114fcb1d53edf409069266afb99",
     "cmd/unifi-pp-mcp/unifi_readonly_test.go": "e3528f00d5cd20b7ebe43793da58ed07fc724bb8c27517bde969776ebcfd7374",
-    "go.mod": "5be1c1350c946ad53d46d96b63d8ced40ab47bb2d5d66d9adab56df2bc38d682",
+    "go.mod": "d02d0473529e4b81c4e55b590ce4918806d77aca357331247e0ba94bca01ad7c",
     "go.sum": "3d168ced4b630c0f6320209227bd73007c420042c61234003a2ac6d2363d663f",
     "internal/cache/cache.go": "419ec83ee042364289ce58142c255846f77029c4ad20b79a67aa5fbe4fda7fd5",
     "internal/cli/agent_context.go": "a4be9503aa7d06fdd4e8883800eb381e66277d95a842b0e5390e01ba2ab34db4",
