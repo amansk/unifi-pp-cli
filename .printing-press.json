@@ -1,0 +1,142 @@
+{
+  "schema_version": 2,
+  "generated_at": "2026-11-07T01:34:13.276481Z",
+  "printing_press_version": "4.35.0",
+  "api_name": "unifi",
+  "display_name": "UniFi",
+  "cli_name": "unifi-pp-cli",
+  "creator": {
+    "handle": "phoenix-server",
+    "name": "Ricardo Cabral"
+  },
+  "contributors": [
+    {
+      "handle": "amansk",
+      "name": "Amandeep Khurana"
+    },
+    {
+      "handle": "cathrynlavery",
+      "name": "Cathryn Lavery"
+    }
+  ],
+  "owner": "phoenix-server",
+  "printer": "phoenix-server",
+  "printer_name": "Ricardo Cabral",
+  "spec_path": "spec.json",
+  "spec_format": "internal",
+  "spec_source": "official",
+  "spec_checksum": "sha256:8c9964f7e00af1e9dbd759e522d3e871ed98377cb96c27ddf82ce640294cb703",
+  "run_id": "20261101-155632-9a5a2a2b",
+  "category": "devices",
+  "description": "Operate UniFi consoles through the cloud connector or your LAN, with a local history, change previews and a change journal.",
+  "homepage": "https://ui.com",
+  "mcp_binary": "unifi-pp-mcp",
+  "mcp_tool_count": 179,
+  "mcp_ready": "full",
+  "api_version": "1.0.0",
+  "auth_type": "api_key",
+  "auth_preference": "apiKey",
+  "auth_env_vars": [
+    "UNIFI_API_KEY"
+  ],
+  "novel_features": [
+    {
+      "name": "Path and capability probe",
+      "command": "reach",
+      "description": "See which transports and products answer on each console. Write status is yes, no or unproven, and a probe alone never reports yes."
+    },
+    {
+      "name": "Impact and lockout check",
+      "command": "impact",
+      "description": "Estimate from the last sync what a proposed action would take down and whether it risks your way back in. It never reports safe."
+    },
+    {
+      "name": "Journaled change with undo",
+      "command": "change apply",
+      "description": "Send one change to an official Network or Protect path with a journaled before-image, a read-back check and undo. Nothing is sent without --confirm."
+    },
+    {
+      "name": "Config drift",
+      "command": "drift",
+      "description": "See field-level config changes between two synced snapshots, marked attributed (in the change journal) or out-of-band."
+    },
+    {
+      "name": "What happened since I looked",
+      "command": "digest",
+      "description": "One timeline, built from local syncs, of state changes, ISP dips, drift, newcomers and journaled changes."
+    },
+    {
+      "name": "Newcomer detection",
+      "command": "newcomer",
+      "description": "List clients, devices and cameras first seen at a sync in a window."
+    },
+    {
+      "name": "Firewall rule prediction",
+      "command": "rule-predict",
+      "description": "Predict which firewall policy would match a hypothetical packet. This is a local prediction with no API confirmation."
+    },
+    {
+      "name": "Device topology tree",
+      "command": "topology",
+      "description": "See gateway, switches and APs as a tree per console, from the last sync."
+    }
+  ],
+  "novel_features_built": [
+    {
+      "name": "Path and capability probe",
+      "command": "reach",
+      "description": "See which transports and products answer on each console. Write status is yes, no or unproven, and a probe alone never reports yes."
+    },
+    {
+      "name": "Impact and lockout check",
+      "command": "impact",
+      "description": "Estimate from the last sync what a proposed action would take down and whether it risks your way back in. It never reports safe."
+    },
+    {
+      "name": "Journaled change with undo",
+      "command": "change apply",
+      "description": "Send one change to an official Network or Protect path with a journaled before-image, a read-back check and undo. Nothing is sent without --confirm."
+    },
+    {
+      "name": "Config drift",
+      "command": "drift",
+      "description": "See field-level config changes between two synced snapshots, marked attributed (in the change journal) or out-of-band."
+    },
+    {
+      "name": "What happened since I looked",
+      "command": "digest",
+      "description": "One timeline, built from local syncs, of state changes, ISP dips, drift, newcomers and journaled changes."
+    },
+    {
+      "name": "Newcomer detection",
+      "command": "newcomer",
+      "description": "List clients, devices and cameras first seen at a sync in a window."
+    },
+    {
+      "name": "Firewall rule prediction",
+      "command": "rule-predict",
+      "description": "Predict which firewall policy would match a hypothetical packet. This is a local prediction with no API confirmation."
+    },
+    {
+      "name": "Device topology tree",
+      "command": "topology",
+      "description": "See gateway, switches and APs as a tree per console, from the last sync."
+    }
+  ],
+  "verify": {
+    "mode": "mock",
+    "pass_rate": 99.47089947089947,
+    "passed": 188,
+    "total": 189,
+    "failed": 1,
+    "data_pipeline": true,
+    "verdict": "PASS"
+  },
+  "scorecard": {
+    "steinberger": {
+      "percentage": 97,
+      "grade": "A",
+      "total": 97
+    }
+  }
+}

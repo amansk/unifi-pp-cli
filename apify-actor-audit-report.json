@@ -1,0 +1,9 @@
+{
+  "dir": "\u003ccli-dir\u003e/unifi-pp-cli",
+  "research_dir": "\u003ccli-dir\u003e/20261101-155632-9a5a2a2b",
+  "verdict": "pass",
+  "actors": null,
+  "issues": [
+    "no Apify actor references found, skipping"
+  ]
+}

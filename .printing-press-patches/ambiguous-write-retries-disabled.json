@@ -1,0 +1,18 @@
+{
+  "schema_version": 2,
+  "applied_at": "2026-11-01",
+  "base_run_id": "20261101-155632-9a5a2a2b",
+  "base_printing_press_version": "4.35.0",
+  "upstream_issue": null,
+  "id": "ambiguous-write-retries-disabled",
+  "summary": "Unprotected writes are not replayed after ambiguous transport or server failures; bounded 429 recovery keeps the platform policy.",
+  "reason": "Carried from the prior print: a failed write may have committed. The generated predicate treated PUT, DELETE and keyed POST as replayable.",
+  "files": [
+    "internal/client/client.go"
+  ],
+  "call_sites": [
+    "canRetryRejected",
+    "isReadOnlyVerb("
+  ],
+  "validated_outcome": "TestAmbiguousWritesAreNeverReplayed sends each verb against 408/500/502 and asserts one attempt."
+}
