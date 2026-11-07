@@ -355,7 +355,7 @@ func (c *Client) resolveTarget(ctx context.Context, path string) (requestTarget,
 			if err := consoleAllowed(""); err != nil {
 				return requestTarget{}, err
 			}
-			return requestTarget{URL: c.BaseURL + path, Kind: TransportPassthrough}, nil
+			return requestTarget{URL: passthroughURL(c.BaseURL, path), Kind: TransportPassthrough}, nil
 		}
 		if c.DryRun {
 			// A preview must not spend a request on /v1/hosts.
@@ -517,7 +517,7 @@ func (c *Client) authHeaderFor(ctx context.Context, target requestTarget) (strin
 // httpClientFor keeps certificate relaxation away from api.ui.com: a single
 // shared client would have to skip verification for both or for neither.
 func (c *Client) httpClientFor(target requestTarget) (*http.Client, error) {
-	if target.Kind != TransportLocal {
+	if target.Kind != TransportLocal && !savedGatewayBase(target) {
 		return c.HTTPClient, nil
 	}
 	c.transport.mu.Lock()
@@ -563,6 +563,28 @@ func (c *Client) httpClientFor(target requestTarget) (*http.Client, error) {
 	}
 	c.transport.localClient = hc
 	return hc, nil
+}
+
+// savedGatewayBase spots a base_url aimed at a gateway on the LAN. Those serve self-signed
+// certificates, so they need the same trust handling as a configured gateway, including
+// UNIFI_CA_CERT and the warning. Plain http mocks and public hosts are unaffected.
+func savedGatewayBase(target requestTarget) bool {
+	if target.Kind != TransportPassthrough {
+		return false
+	}
+	u, err := url.Parse(target.URL)
+	return err == nil && u.Scheme == "https" && hostIsLocalNetwork(u.Hostname())
+}
+
+// passthroughURL keeps a saved gateway base_url working. Earlier releases documented
+// https://<gateway>/proxy/network, but console paths now start with their product, so
+// appending them directly would request /proxy/network/network/... and miss the gateway.
+func passthroughURL(base, path string) string {
+	trimmed := strings.TrimRight(base, "/")
+	if strings.HasSuffix(trimmed, "/proxy/network") && (strings.HasPrefix(path, "/network/") || strings.HasPrefix(path, "/protect/")) {
+		return strings.TrimSuffix(trimmed, "/network") + path
+	}
+	return base + path
 }
 
 // gatewaySkipsTLSVerify: UniFi OS gateways serve a self-signed certificate on
